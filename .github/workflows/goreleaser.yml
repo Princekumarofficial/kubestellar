@@ -40,7 +40,7 @@ jobs:
         id: import_gpg
         run: |
           # Create a temporary file with the decoded key
-          echo "${{ secrets.PK }}" | base64 --decode > /tmp/private.key
+          echo "${{ secrets.PK }}" | base64 -d > /tmp/private.key
 
           # Check if the file has content
           if [ ! -s /tmp/private.key ]; then
