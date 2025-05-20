@@ -39,7 +39,7 @@ jobs:
       - name: Import GPG key
         id: import_gpg
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d | gpg --import
+          echo "${{ secrets.PK }}" | base64 -d | gpg --import
           echo "use-agent" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
