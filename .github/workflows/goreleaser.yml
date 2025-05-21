@@ -37,8 +37,9 @@ jobs:
         uses: anchore/sbom-action/download-syft@9f7302141466aa6482940f15371237e9d9f4c34a
 
       - name: Import GPG Key
+        id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v6
-        env:
+        with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
 
