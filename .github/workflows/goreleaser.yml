@@ -36,36 +36,11 @@ jobs:
       - name: Install syft binary executable
         uses: anchore/sbom-action/download-syft@9f7302141466aa6482940f15371237e9d9f4c34a
 
-      - name: Import GPG key
-        id: import_gpg
-        run: |
-          # Create a temporary file with the decoded key
-          echo "${{ secrets.PK }}" | base64 -d > /tmp/private.key
-
-          # Check if the file has content
-          if [ ! -s /tmp/private.key ]; then
-            echo "Error: Decoded GPG key is empty. Check your PK secret."
-            exit 1
-          fi
-
-          # Import the key with passphrase
-          gpg --batch --yes --passphrase "${{ secrets.GPG_PASSPHRASE }}" --import /tmp/private.key
-
-          # Configure GPG agent
-          mkdir -p ~/.gnupg
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          gpg-connect-agent RELOADAGENT /bye
-
-          # Export fingerprint for later use
-          fingerprint=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
-          echo "fingerprint=$fingerprint" >> $GITHUB_OUTPUT
-
-          # Clean up
-          rm -f /tmp/private.key
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v1
         env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Run GoReleaser on tag
         uses: goreleaser/goreleaser-action@9c156ee8a17a598857849441385a2041ef570552
