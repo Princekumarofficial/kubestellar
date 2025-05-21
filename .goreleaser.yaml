@@ -65,5 +65,5 @@ sboms:
     documents:
       - "{{ .Binary }}_{{ .Os }}_{{ .Arch }}.sbom"
 
-snapshot:
-  skip_sign: true
+signs:
+  - artifacts: checksum
